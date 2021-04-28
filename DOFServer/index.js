@@ -39,15 +39,15 @@ server.on("connection", function (socket) {
 
                 var arr = [recvData, data];
                 recvData = Buffer.concat(arr);
-                if(recvData.byteLength > 4){
-                    var byteCount = recvData.toString("utf8",0,4);
+                if (recvData.byteLength > 4) {
+                    var byteCount = recvData.toString("utf8", 0, 4);
 
-                    if(recvData.byteLength >= 4 + parseInt(byteCount)){
-                        var originData = recvData.toString("utf8",4, 4 + parseInt(byteCount));
+                    if (recvData.byteLength >= 4 + parseInt(byteCount)) {
+                        var originData = recvData.toString("utf8", 4, 4 + parseInt(byteCount));
 
                         HandleData(originData);
 
-                        recvData = recvData.slice(4 + parseInt(byteCount),recvData.byteLength);
+                        recvData = recvData.slice(4 + parseInt(byteCount), recvData.byteLength);
                     }
                 }
 
@@ -95,24 +95,22 @@ server.on("connection", function (socket) {
                     eD: {}
                 };
 
-                var sendMsg = JSON.stringify(json)+ "Partition";
+                var sendMsg = JSON.stringify(json) + "Partition";
 
                 var lngBuf = Buffer.alloc(4);
                 var lng = strByteLength(sendMsg);
 
-                lngBuf.write(lng+"","utf8");
-
-                for (var username in clients) { // 다른 유저들에게 전송.
-                    if (clients[username] != socket) {
-                        clients[username].write(lngBuf.toString() + sendMsg);
-                    }
-                }
+                lngBuf.write(lng + "", "utf8");
 
                 delete clients[disconUserName];
+                console.log(clients);
+
+                for (var username in clients) { // 다른 유저들에게 전송.
+                    clients[username].write(lngBuf.toString() + sendMsg);
+                }
 
                 let date = new Date();
                 console.log("closed ", date);
-                console.log(clients);
 
             } catch (error) {
                 let date = new Date();
