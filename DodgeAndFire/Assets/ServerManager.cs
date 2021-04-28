@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,13 +33,13 @@ public class ServerManager : MonoBehaviour
     TcpClient client;
     NetworkStream nwStream;
 
+    Thread t;
+
     byte[] recvData = new byte[0];
     private Queue<string> dataQueue = new Queue<string>(); // 수신용 쓰레드를 메인쓰레드에서 읽기 위해 담는 큐.
     private Queue<string> writeQueue = new Queue<string>(); // 송신용 큐.
 
     bool Connected = false;
-
-    private AsyncCallback m_fnReceiveHandler;
     private void Update()
     {
         if (client != null && !client.Connected)
@@ -77,6 +78,7 @@ public class ServerManager : MonoBehaviour
                 }
                 if (eventData.eN == "Disconnection")
                 {
+                    Debug.Log("Disconnection : " + eventData.pN);
                     BattleManager.Instance.EnemyDelete(eventData.pN);
                 }
             }
@@ -161,12 +163,12 @@ public class ServerManager : MonoBehaviour
                 writeQueue.Enqueue(eventJson + "Partition");
 
                 // receive.
-                m_fnReceiveHandler = new AsyncCallback(handleDataReceive);
+                //m_fnReceiveHandler = new AsyncCallback(handleDataReceive);
 
                 // 비동기 자료 수신 BeginReceive.
-                byte[] bytesToRead = new byte[140];
-
-                nwStream.BeginRead(bytesToRead, 0, bytesToRead.Length, m_fnReceiveHandler, bytesToRead);
+                ThreadStart th = new ThreadStart(handleDataReceive);
+                t = new Thread(th);
+                t.Start();
             }
             catch (Exception ex)
             {
@@ -185,6 +187,7 @@ public class ServerManager : MonoBehaviour
         }
         try
         {
+            t.Abort();
             client.Close();
         }
         catch (Exception ex)
@@ -201,35 +204,35 @@ public class ServerManager : MonoBehaviour
         Debug.Log("Close success");
 
     }
-    private void handleDataReceive(IAsyncResult ar)
+    private void handleDataReceive()
     {
-        byte[] buffer = (byte[])ar.AsyncState;
-
-        int recvBytes = nwStream.EndRead(ar);
-
-        int prevLength = recvData.Length;
-        Array.Resize(ref recvData, recvData.Length + recvBytes);
-        Array.Copy(buffer, 0, recvData, prevLength, recvBytes);
-
-        if (recvData.Length > 4)
+        while (true)
         {
-            string byteCount = Encoding.UTF8.GetString(recvData, 0, 4);
+            byte[] buffer = new byte[140];
+            int recvBytes = nwStream.Read(buffer, 0, buffer.Length);
 
-            int bC = int.Parse(byteCount);
+            int prevLength = recvData.Length;
+            Array.Resize(ref recvData, recvData.Length + recvBytes);
+            Array.Copy(buffer, 0, recvData, prevLength, recvBytes);
 
-            if (recvData.Length >= 4 + bC)
+            if (recvData.Length > 4)
             {
-                string Data = Encoding.UTF8.GetString(recvData, 4, bC);
+                string byteCount = Encoding.UTF8.GetString(recvData, 0, 4);
 
-                DataToMainThread(Data);
+                int bC = int.Parse(byteCount);
 
-                Array.Clear(recvData, 0, 4 + bC);
-                Array.Copy(recvData, 4 + bC, recvData, 0, recvData.Length - (4 + bC));
-                Array.Resize(ref recvData, recvData.Length - (4 + bC));
+                if (recvData.Length >= 4 + bC)
+                {
+                    string Data = Encoding.UTF8.GetString(recvData, 4, bC);
+
+                    DataToMainThread(Data);
+
+                    Array.Clear(recvData, 0, 4 + bC);
+                    Array.Copy(recvData, 4 + bC, recvData, 0, recvData.Length - (4 + bC));
+                    Array.Resize(ref recvData, recvData.Length - (4 + bC));
+                }
             }
         }
-
-        nwStream.BeginRead(buffer, 0, buffer.Length, m_fnReceiveHandler, buffer);
     }
     private void DataToMainThread(string completeData)
     {

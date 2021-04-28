@@ -17,7 +17,21 @@ function strByteLength(s, b, i, c) {
     return b
 }
 
+//test
+var json = {
+    pN: "asd",
+    eN: "Disconnection",
+    eD: {}
+};
 
+var sendMsg = JSON.stringify(json) + "Partition";
+
+var lngBuf = Buffer.alloc(4);
+var lng = strByteLength(sendMsg);
+console.log(lng);
+lngBuf.write(lng + "", "utf8");
+var msgBuf = Buffer.from("12366", "utf-8");
+console.log(msgBuf.byteLength);
 
 
 // 본문.
@@ -40,10 +54,10 @@ server.on("connection", function (socket) {
                 var arr = [recvData, data];
                 recvData = Buffer.concat(arr);
                 if (recvData.byteLength > 4) {
-                    var byteCount = recvData.toString("utf8", 0, 4);
+                    var byteCount = recvData.toString("utf-8", 0, 4);
 
                     if (recvData.byteLength >= 4 + parseInt(byteCount)) {
-                        var originData = recvData.toString("utf8", 4, 4 + parseInt(byteCount));
+                        var originData = recvData.toString("utf-8", 4, 4 + parseInt(byteCount));
 
                         HandleData(originData);
 
@@ -100,13 +114,17 @@ server.on("connection", function (socket) {
                 var lngBuf = Buffer.alloc(4);
                 var lng = strByteLength(sendMsg);
 
-                lngBuf.write(lng + "", "utf8");
+                lngBuf.write(lng + "", "utf-8");
+
+                var msgBuf = Buffer.from(sendMsg, "utf-8");
+
+                var bufArr = [lngBuf,msgBuf];
 
                 delete clients[disconUserName];
                 console.log(clients);
 
                 for (var username in clients) { // 다른 유저들에게 전송.
-                    clients[username].write(lngBuf.toString() + sendMsg);
+                    clients[username].write(Buffer.concat(bufArr));
                 }
 
                 let date = new Date();

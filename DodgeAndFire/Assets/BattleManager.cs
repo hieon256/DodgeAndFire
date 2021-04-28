@@ -42,8 +42,9 @@ public class BattleManager : MonoBehaviour
             catch { continue; }
         }
 
-        player.SetActive(false);
+        playerScript.UI.Hp.transform.localPosition = playerScript.UI.originPos;
         playerScript.UI.gameObject.SetActive(false);
+        player.SetActive(false);
     }
     public void ConnectGame()
     {
@@ -59,7 +60,7 @@ public class BattleManager : MonoBehaviour
             catch { continue; }
         }
 
-        int ran = Random.Range(0, randomSpawn.Count - 1);
+        int ran = Random.Range(0, randomSpawn.Count);
 
         float spawnX = randomSpawn[ran].transform.position.x;
         float spawnScaleX = randomSpawn[ran].transform.localScale.x;
@@ -117,6 +118,9 @@ public class BattleManager : MonoBehaviour
                 ps.transform.position = enemyList[i].transform.position;
                 ps.Play();
                 Destroy(ps, 1.0f);
+
+                UI UI = enemyList[i].GetComponent<EnemyObject>().UI;
+                UI.Hp.transform.localPosition = UI.originPos;
 
                 pushUI(enemyList[i].GetComponent<EnemyObject>().UI.gameObject);
                 enemyList[i].GetComponent<EnemyObject>().UI = null;

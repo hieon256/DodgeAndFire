@@ -11,7 +11,7 @@ public class UI : MonoBehaviour
     public int maxHp;
     public int hp;
 
-    Vector3 originPos;
+    public Vector3 originPos;
 
     bool isCollide;
     float collideStartTime;

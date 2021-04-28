@@ -14,7 +14,6 @@ ScriptsOnlyBuild:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.IK.Editor.dll:
     - UnityEditor.U2D.IK.IKEditorManager
-    - UnityEditor.U2D.IK.IKGizmos
     Unity.2D.IK.Runtime.dll:
     - UnityEditor.U2D.IK.IKEditorManagerHelper
     Unity.2D.Tilemap.Editor.dll:
@@ -66,41 +65,41 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1486}
+      Script: {instanceID: 1488}
     - Class: 114
-      Script: {instanceID: 1652}
+      Script: {instanceID: 1560}
     - Class: 114
-      Script: {instanceID: 1760}
+      Script: {instanceID: 1656}
     - Class: 114
-      Script: {instanceID: 2070}
+      Script: {instanceID: 1764}
     - Class: 114
-      Script: {instanceID: 2432}
+      Script: {instanceID: 2074}
     - Class: 114
-      Script: {instanceID: 2452}
+      Script: {instanceID: 2436}
     - Class: 114
-      Script: {instanceID: 2580}
+      Script: {instanceID: 2456}
     - Class: 114
-      Script: {instanceID: 2748}
+      Script: {instanceID: 2584}
     - Class: 114
-      Script: {instanceID: 2798}
+      Script: {instanceID: 2752}
     - Class: 114
-      Script: {instanceID: 2952}
+      Script: {instanceID: 2802}
     - Class: 114
-      Script: {instanceID: 3052}
+      Script: {instanceID: 2956}
     - Class: 114
-      Script: {instanceID: 3152}
+      Script: {instanceID: 3056}
     - Class: 114
-      Script: {instanceID: 3418}
+      Script: {instanceID: 3156}
     - Class: 114
-      Script: {instanceID: 3890}
+      Script: {instanceID: 3422}
     - Class: 114
-      Script: {instanceID: 4108}
+      Script: {instanceID: 3894}
     - Class: 114
-      Script: {instanceID: 4446}
+      Script: {instanceID: 4112}
     - Class: 114
-      Script: {instanceID: 4934}
+      Script: {instanceID: 4450}
     - Class: 114
-      Script: {instanceID: 20318}
+      Script: {instanceID: 4938}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -148,6 +147,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.2D.Animation.Runtime.dll
     namespaceName: UnityEngine.U2D.Animation
     className: SpriteSkin
+  - hash:
+      serializedVersion: 2
+      Hash: cfbbddcab6ac7e4417f5efa1dbbc5699
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: EnemyFireObject
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -264,7 +269,7 @@ ScriptsOnlyBuild:
     className: CanvasScaler
   - hash:
       serializedVersion: 2
-      Hash: b871a55bd5e4d6c551ce86e0290f3a2e
+      Hash: ac0997a921ff0be15f94a81b0078b6f6
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: UI
@@ -688,12 +693,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.2D.IK.Runtime.dll
     namespaceName: UnityEngine.U2D.IK
     className: FabrikSolver2D
-  - hash:
-      serializedVersion: 2
-      Hash: cfbbddcab6ac7e4417f5efa1dbbc5699
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: EnemyFireObject
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
