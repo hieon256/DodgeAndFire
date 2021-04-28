@@ -64,7 +64,7 @@ server.on("connection", function (socket) {
                 if (data[index] == "")
                     continue;
 
-                Data = JSON.parse(data[index]);
+                var Data = JSON.parse(data[index]);
 
                 if (Data.eN == "Connection") {
                     if (clients.hasOwnProperty(Data.pN)) {
