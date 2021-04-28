@@ -99,7 +99,6 @@ server.on("connection", function (socket) {
 
                 var lngBuf = Buffer.alloc(4);
                 var lng = strByteLength(sendMsg);
-                if(lng)
 
                 lngBuf.write(lng+"","utf8");
 
