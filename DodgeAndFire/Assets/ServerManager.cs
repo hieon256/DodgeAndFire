@@ -228,57 +228,7 @@ public class ServerManager : MonoBehaviour
                 Array.Resize(ref recvData, recvData.Length - (4 + bC));
             }
         }
-        /*
-        if (recvBytes > 0)
-        {
-            string[] str = Encoding.UTF8.GetString(buffer, 0, recvBytes).Split(new string[] { "<" }, StringSplitOptions.None);
 
-            if (recvData.Count > 0)
-            {
-                recvData[recvData.Count - 1] += str[0];
-            }
-            else
-            {
-                if(str[0] != string.Empty)
-                    recvData.Add(str[0]);
-            }
-
-            for (int i = 1; i < str.Length; i++)
-            {
-                recvData.Add(str[i]);
-            }
-
-            //int removeIndex = 0;
-
-            if (recvData.Count > 1)
-            {
-                if (int.Parse(recvData[0]) <= Encoding.Default.GetByteCount(recvData[1]))
-                {
-                    DataToMainThread(recvData[1]);
-                    recvData.RemoveRange(0, 2);
-                }
-            }
-            /*
-            for (int i = 1; i < recvData.Count; i++)
-            {
-                compareData += recvData[i];
-                if (int.Parse(recvData[0]) > Encoding.Default.GetByteCount(compareData))
-                {
-                    continue;
-                }
-                else
-                {
-                    removeIndex = i;
-                    DataToMainThread(compareData);
-                    break;
-                }
-            }
-            if (removeIndex > 0)
-            {
-                recvData.RemoveRange(0, removeIndex + 1);
-            }
-        }
-        */
         nwStream.BeginRead(buffer, 0, buffer.Length, m_fnReceiveHandler, buffer);
     }
     private void DataToMainThread(string completeData)
